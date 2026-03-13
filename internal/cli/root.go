@@ -3,6 +3,7 @@ package cli
 import (
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/spf13/cobra"
 
@@ -36,11 +37,6 @@ func newSayCommand() *cobra.Command {
 				return err
 			}
 
-			apiKey := gemini.ResolveAPIKey()
-			if apiKey == "" {
-				return fmt.Errorf("GEMINI_API_KEY or GOOGLE_API_KEY is required for `sona say`")
-			}
-
 			sayQueue, err := queue.NewSayQueue()
 			if err != nil {
 				return err
@@ -52,8 +48,7 @@ func newSayCommand() *cobra.Command {
 			}
 			defer slot.Release()
 
-			synthesizer := gemini.New(apiKey)
-			return synthesizer.Synthesize(cmd.Context(), text, &lazyPCMPlayer{})
+			return speakText(cmd, text)
 		},
 	}
 
@@ -61,11 +56,31 @@ func newSayCommand() *cobra.Command {
 }
 
 func newListenCommand() *cobra.Command {
-	return &cobra.Command{
+	var prompt string
+
+	cmd := &cobra.Command{
 		Use:   "listen",
 		Short: "Listen through the current microphone and print final JSON",
 		Args:  cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, _ []string) error {
+			prompt = strings.TrimSpace(prompt)
+			if prompt != "" {
+				sayQueue, err := queue.NewSayQueue()
+				if err != nil {
+					return err
+				}
+
+				slot, err := sayQueue.Acquire(cmd.Context())
+				if err != nil {
+					return err
+				}
+				defer slot.Release()
+
+				if err := speakText(cmd, prompt); err != nil {
+					return err
+				}
+			}
+
 			transcriber := apple.New()
 			transcript, err := transcriber.Listen(cmd.Context())
 			if err != nil {
@@ -74,4 +89,17 @@ func newListenCommand() *cobra.Command {
 			return writeJSON(os.Stdout, transcript)
 		},
 	}
+
+	cmd.Flags().StringVar(&prompt, "prompt", "", "Speak this prompt immediately before listening")
+	return cmd
+}
+
+func speakText(cmd *cobra.Command, text string) error {
+	apiKey := gemini.ResolveAPIKey()
+	if apiKey == "" {
+		return fmt.Errorf("GEMINI_API_KEY or GOOGLE_API_KEY is required for speech output")
+	}
+
+	synthesizer := gemini.New(apiKey)
+	return synthesizer.Synthesize(cmd.Context(), text, &lazyPCMPlayer{})
 }

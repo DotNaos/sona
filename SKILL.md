@@ -18,6 +18,7 @@ Use this skill when a task needs local voice input or output from the terminal o
 - `sona say "Hello"` speaks the given text aloud.
 - `echo "Hello" | sona say` reads text from stdin when no positional text is provided.
 - `sona listen` records one utterance and prints final JSON to stdout.
+- `sona listen --prompt "What would you like to say?"` speaks the prompt and then immediately listens.
 
 ## Requirements
 
@@ -29,6 +30,7 @@ Use this skill when a task needs local voice input or output from the terminal o
 ## Behavior Notes
 
 - `sona say` uses a global cross-process queue, so concurrent calls are played one at a time.
+- `sona listen --prompt ...` keeps the spoken prompt and the following listen phase together, so another queued `sona say` cannot interleave between them.
 - The queue inserts a short pause after each spoken item to keep rapid agent notifications intelligible.
 - `sona listen` prints exactly one final JSON object to stdout and sends diagnostics to stderr.
 

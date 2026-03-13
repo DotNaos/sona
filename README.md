@@ -2,8 +2,20 @@
 
 `sona` is a macOS-first speech CLI.
 
+## Quick Start
+
+```bash
+go install github.com/DotNaos/sona/cmd/sona@latest
+export GEMINI_API_KEY="your-api-key"
+
+sona say "Hallo, das ist ein Test"
+sona listen
+sona listen --prompt "Was möchtest du sagen?"
+```
+
 - `sona say [text]` speaks text through the current speaker using Gemini native audio output.
 - `sona listen` captures one spoken utterance and prints final JSON transcription using Apple SpeechTranscriber.
+- `sona listen --prompt "..."` speaks a prompt and then immediately starts listening under the same global speech queue slot.
 
 ## Requirements
 
