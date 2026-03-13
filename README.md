@@ -14,7 +14,7 @@
 ## Install
 
 ```bash
-go install ./cmd/sona
+go install github.com/DotNaos/sona/cmd/sona@latest
 ```
 
 ## Skill Install

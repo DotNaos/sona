@@ -22,6 +22,7 @@ Use this skill when a task needs local voice input or output from the terminal o
 ## Requirements
 
 - `sona` must be installed in PATH.
+- Install it with `go install github.com/DotNaos/sona/cmd/sona@latest`.
 - `GEMINI_API_KEY` or `GOOGLE_API_KEY` must be set for `sona say`.
 - `sona listen` requires macOS 26+ with Apple SpeechTranscriber available and microphone permission granted.
 
@@ -36,3 +37,4 @@ Use this skill when a task needs local voice input or output from the terminal o
 1. Use `sona say` for short confirmations, alerts, or user-facing spoken summaries.
 2. Use `sona listen` when you need a single spoken response from the current user.
 3. If `sona say` is invoked repeatedly by multiple agents, rely on the built-in queue rather than adding your own local throttling.
+4. If `sona` is not yet installed, run `go install github.com/DotNaos/sona/cmd/sona@latest` before using the commands.
