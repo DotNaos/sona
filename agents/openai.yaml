@@ -1,0 +1,4 @@
+interface:
+  display_name: "Sona"
+  short_description: "Speak text aloud and capture one-shot microphone transcription on macOS"
+  default_prompt: "Use `sona` to speak this text aloud or capture one spoken utterance as final JSON."
