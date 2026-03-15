@@ -37,6 +37,7 @@ Use this skill when a task needs local voice input or output from the terminal o
 
 - `sona say` uses a global cross-process queue, so concurrent calls are played one at a time.
 - `sona listen --prompt ...` keeps the spoken prompt and the following listen phase together, so another queued `sona say` cannot interleave between them.
+- If the spoken language is German, write normal German spelling with `ä`, `ö`, `ü`, and `ß` instead of `ae`, `oe`, `ue`, or `ss` when possible, because the TTS pronunciation is noticeably more natural that way.
 - After `sona setup whispercpp`, most agents should only need `sona listen --locale ...`.
 - The queue inserts a short pause after each spoken item to keep rapid agent notifications intelligible.
 - `sona listen` prints exactly one final JSON object to stdout and sends diagnostics to stderr.
@@ -47,5 +48,6 @@ Use this skill when a task needs local voice input or output from the terminal o
 2. Run `sona setup whispercpp` once per machine before relying on voice input.
 3. Use `sona listen --locale ...` when you need a single spoken response from the current user.
 4. Set `--locale` to the same language as your spoken prompt, or explicitly say which language you expect in the answer.
-5. If `sona say` is invoked repeatedly by multiple agents, rely on the built-in queue rather than adding your own local throttling.
-6. If `sona` is not yet installed, run `go install github.com/DotNaos/sona/cmd/sona@latest` before using the commands.
+5. For German prompts or spoken summaries, prefer proper umlauts and `ß` in the text you pass to `sona say`.
+6. If `sona say` is invoked repeatedly by multiple agents, rely on the built-in queue rather than adding your own local throttling.
+7. If `sona` is not yet installed, run `go install github.com/DotNaos/sona/cmd/sona@latest` before using the commands.
