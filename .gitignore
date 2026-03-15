@@ -2,6 +2,7 @@
 
 # Local build outputs
 /sona
+/.tmp/
 /internal/apple/speechhelper/.build/
 
 # macOS / editors
